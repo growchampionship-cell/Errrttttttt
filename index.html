@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TikTok Coins Demo</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0d0d0d;
+  color: white;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  font-size: 18px;
+  border-bottom: 1px solid #222;
+}
+.header span {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+/* Container */
+.container {
+  padding: 15px;
+}
+
+/* Username */
+.input-box {
+  background: #1a1a1a;
+  padding: 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+}
+.input-box input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  margin-left: 10px;
+  width: 100%;
+}
+
+/* Section */
+.section {
+  margin-top: 20px;
+}
+.section h4 {
+  margin-bottom: 10px;
+}
+
+/* Coins Grid */
+.coins {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.coin-card {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.coin-card.active {
+  border: 1px solid #ff2c55;
+  background: #2a1a1f;
+}
+
+/* Balance */
+.balance {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  padding: 14px;
+  background: #ff2c55;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+/* Payment Screen */
+.payment {
+  display: none;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.loader {
+  border: 4px solid #333;
+  border-top: 4px solid #ff2c55;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.success {
+  color: #00ff99;
+  margin-top: 20px;
+  font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  ← <span>Get Coins</span>
+</div>
+
+<!-- MAIN -->
+<div class="container" id="main">
+
+  <!-- Username -->
+  <div class="input-box">
+    👤 <input id="username" placeholder="Enter username">
+  </div>
+
+  <!-- Coins -->
+  <div class="section">
+    <h4>Recharge</h4>
+
+    <div class="coins">
+      <div class="coin-card" onclick="select(this,30)">30 🪙</div>
+      <div class="coin-card" onclick="select(this,350)">350 🪙</div>
+      <div class="coin-card" onclick="select(this,700)">700 🪙</div>
+      <div class="coin-card" onclick="select(this,1400)">1400 🪙</div>
+      <div class="coin-card" onclick="select(this,3500)">3500 🪙</div>
+      <div class="coin-card" onclick="select(this,10000)">Custom</div>
+    </div>
+  </div>
+
+  <!-- Balance -->
+  <div class="balance">
+    Balance: <span id="balance">5000</span> coins
+  </div>
+
+  <!-- Button -->
+  <button class="btn" onclick="pay()">Recharge</button>
+</div>
+
+<!-- PAYMENT SCREEN -->
+<div class="payment" id="payment">
+  <h2>Processing</h2>
+  <div class="loader"></div>
+  <p id="status">Securing payment...</p>
+  <div class="success" id="success"></div>
+</div>
+
+<script>
+let selected = 0;
+let balance = 5000;
+
+function select(el, amount) {
+  document.querySelectorAll('.coin-card').forEach(c => {
+    c.classList.remove('active');
+  });
+  el.classList.add('active');
+  selected = amount;
+}
+
+function pay() {
+  let user = document.getElementById("username").value;
+
+  if (!user || selected === 0) {
+    alert("Enter username and select coins");
+    return;
+  }
+
+  document.getElementById("main").style.display = "none";
+  document.getElementById("payment").style.display = "block";
+
+  setTimeout(() => {
+    document.getElementById("status").innerText = "Connecting...";
+  }, 1000);
+
+  setTimeout(() => {
+    document.getElementById("status").innerText = "Verifying...";
+  }, 2000);
+
+  setTimeout(() => {
+    balance -= selected;
+    document.getElementById("success").innerText =
+      "✅ " + selected + " coins sent to @" + user;
+  }, 3500);
+}
+</script>
+
+</body>
+</html>
